@@ -1,3 +1,4 @@
+#GitHub Repo: https://github.com/haydensuhadolc/A8-Sprite
 import math
 
 from PyQt6.QtGui import *
@@ -23,10 +24,9 @@ class SpritePreview(QMainWindow):
         # This loads the provided sprite and would need to be changed for your own.
         self.num_frames = 21
         self.frames = load_sprite('spriteImages',self.num_frames)
-
         # Add any other instance variables needed to track information as the program
         # runs here
-
+        self.current_frame = 0
         # Make the GUI in the setupUI method
         self.setupUI()
 
@@ -34,9 +34,16 @@ class SpritePreview(QMainWindow):
     def setupUI(self):
         # An application needs a central widget - often a QFrame
         frame = QFrame()
-
         # Add a lot of code here to make layouts, more QFrame or QWidgets, and
         # the other components of the program.
+        layout = QVBoxLayout()
+
+        self.sprite_label = QLabel()
+        self.sprite_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.sprite_label.setPixmap(self.frames[self.current_frame])
+
+        layout.addWidget(self.sprite_label)
+        frame.setLayout(layout)
         # Create needed connections between the UI components and slot methods
         # you define in this class.
 
