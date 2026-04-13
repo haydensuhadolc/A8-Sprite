@@ -34,6 +34,8 @@ class SpritePreview(QMainWindow):
         # Make the GUI in the setupUI method
         self.setupUI()
 
+        self.make_menu()
+
         self.update_image()
         self.update_timer_interval()
 
@@ -60,18 +62,29 @@ class SpritePreview(QMainWindow):
         self.fps_slider = QSlider(Qt.Orientation.Horizontal)
         self.fps_slider.setRange(1, 100)
         self.fps_slider.setValue(self.fps)
-
         self.fps_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.fps_slider.setTickInterval(5)
         self.fps_slider.valueChanged.connect(self.change_fps)
-
         layout.addWidget(self.fps_slider)
 
+        self.start_stop_button = QPushButton("Start")
+        self.start_stop_button.clicked.connect(self.toggle_animation)
         frame.setLayout(layout)
         # Create needed connections between the UI components and slot methods
         # you define in this class.
 
         self.setCentralWidget(frame)
+
+    def make_menu(self):
+        menu = self.menuBar().addMenu("Options")
+
+        pause_action = QAction("Pause", self)
+        pause_action.triggered.connect(self.pause_animation)
+        menu.addAction(pause_action)
+
+        exit_action = QAction("Exit", self)
+        exit_action.triggered.connect(self.close)
+        menu.addAction(exit_action)
 
     def update_image(self):
         self.sprite_label.setPixmap(self.frames[self.current_frame])
@@ -89,11 +102,18 @@ class SpritePreview(QMainWindow):
         interval = int(1000/self.fps)
         self.timer.setInterval(interval)
 
-    def start_animation(self):
-        self.timer.start()
+    def toggle_animation(self):
+        if self.start_stop_button.text() == "Start":
+            self.update_timer_interval()
+            self.timer.start()
+            self.start_stop_button.setText("Stop")
+        else:
+            self.timer.stop()
+            self.start_stop_button.setText("Start")
 
-    def stop_animation(self):
+    def pause_animation(self):
         self.timer.stop()
+        self.start_stop_button.setText("Start")
 
 
     # You will need methods in the class to act as slots to connect to signals
