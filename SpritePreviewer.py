@@ -58,12 +58,11 @@ class SpritePreview(QMainWindow):
         layout.addWidget(self.fps_value_label)
 
         self.fps_slider = QSlider(Qt.Orientation.Horizontal)
-        self.fps_slider.setRange(1,100)
+        self.fps_slider.setRange(1, 100)
         self.fps_slider.setValue(self.fps)
 
         self.fps_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.fps_slider.setTickInterval(5)
-
         self.fps_slider.valueChanged.connect(self.change_fps)
 
         layout.addWidget(self.fps_slider)
