@@ -45,19 +45,41 @@ class SpritePreview(QMainWindow):
         # Add a lot of code here to make layouts, more QFrame or QWidgets, and
         # the other components of the program.
         layout = QVBoxLayout()
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setSpacing(15)
+
+        image_frame = QFrame()
+        image_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        image_layout = QVBoxLayout()
+        image_layout.setContentsMargins(10, 10, 10, 10)
 
         self.sprite_label = QLabel()
         self.sprite_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.sprite_label.setPixmap(self.frames[self.current_frame])
-        layout.addWidget(self.sprite_label)
+        image_layout.addWidget(self.sprite_label)
 
+        image_frame.setLayout(image_layout)
+        layout.addWidget(image_frame)
+
+        control_frame = QFrame()
+        control_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        control_layout = QVBoxLayout()
+        control_layout.setContentsMargins(15, 15, 15, 15)
+        control_layout.setSpacing(10)
+
+        fps_title_row = QHBoxLayout()
         self.fps_text_label = QLabel("Frames Per Second")
         self.fps_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.fps_text_label)
+        fps_title_row.addStretch()
+        fps_title_row.addWidget(self.fps_text_label)
+        fps_title_row.addStretch()
+        control_layout.addLayout(fps_title_row)
+
 
         self.fps_value_label = QLabel(str(self.fps))
+        self.fps_value_label.setMinimumWidth(40)
         self.fps_value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.fps_value_label)
+
+        slider_row = QHBoxLayout()
 
         self.fps_slider = QSlider(Qt.Orientation.Horizontal)
         self.fps_slider.setRange(1, 100)
@@ -65,10 +87,25 @@ class SpritePreview(QMainWindow):
         self.fps_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.fps_slider.setTickInterval(5)
         self.fps_slider.valueChanged.connect(self.change_fps)
-        layout.addWidget(self.fps_slider)
+        slider_row.addWidget(self.fps_slider)
+        slider_row.addWidget(self.fps_value_label)
 
+        control_layout.addLayout(slider_row)
+
+        button_row = QHBoxLayout()
         self.start_stop_button = QPushButton("Start")
         self.start_stop_button.clicked.connect(self.toggle_animation)
+
+        button_row.addStretch()
+        button_row.addWidget(self.start_stop_button)
+        button_row.addStretch()
+
+        control_layout.addLayout(button_row)
+
+        control_frame.setLayout(control_layout)
+        layout.addWidget(control_frame)
+
+
         frame.setLayout(layout)
         # Create needed connections between the UI components and slot methods
         # you define in this class.
